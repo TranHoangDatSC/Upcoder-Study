@@ -1,116 +1,105 @@
 #include <iostream>
 using namespace std;
 
-int gcd(int a, int b)
-{
-    if(b == 0) return a;
-    return gcd(b,a%b);
-}
+class PhanSo {
+private:
+    int tu, mau;
 
-struct PhanSo
-{
-    int tu,mau;
-    
-    friend istream& operator >> (istream& is, PhanSo& ps)
-    {
+    int gcd(int a, int b) {
+        return b == 0 ? a : gcd(b, a % b);
+    }
+
+public:
+    PhanSo() : tu(0), mau(1) {} // Khởi tạo mặc định
+
+    friend istream& operator>>(istream& is, PhanSo& ps) {
         is >> ps.tu >> ps.mau;
         return is;
     }
-    friend ostream& operator << (ostream& os, PhanSo ps)
-    {
+
+    friend ostream& operator<<(ostream& os, const PhanSo& ps) {
         os << ps.tu << "/" << ps.mau;
         return os;
     }
-    
-    void rutgon()
-    {
-        int d = gcd(this->tu, this->mau);
-        this->tu /= d;
-        this->mau /= d;
+
+    void rutgon() {
+        int d = gcd(tu, mau);
+        tu /= d;
+        mau /= d;
     }
-    
-    PhanSo operator + (PhanSo other)
-    {
+
+    PhanSo operator+(const PhanSo& other) {
         PhanSo kq;
         kq.tu = this->tu * other.mau + this->mau * other.tu;
         kq.mau = this->mau * other.mau;
         kq.rutgon();
         return kq;
     }
-    void operator = (int other)
-    {
+
+    void operator=(int other) {
         this->tu = other;
         this->mau = 1;
     }
 };
 
-template<typename T>
-struct Mang
-{
-    int size = 0;
+template <typename T>
+class Mang {
+private:
+    int size;
     T values[100];
-    
-    T& operator [](int index)
-    {
+
+public:
+    Mang() : size(0) {} // Khởi tạo mặc định
+
+    T& operator[](int index) {
         return values[index];
     }
-    void operator = (Mang arr)
-    {
+
+    void operator=(const Mang<T>& arr) {
         size = arr.size;
-        for(int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             values[i] = arr.values[i];
         }
     }
-    
-    friend istream& operator >> (istream& is, Mang& arr)
-    {
+
+    friend istream& operator>>(istream& is, Mang<T>& arr) {
         T x;
-        
-        while(is >> x)
-        {
+        while (is >> x) {
             arr.values[arr.size++] = x;
         }
         return is;
     }
-    friend ostream& operator << (ostream& os, Mang arr)
-    {
-        cout << arr.Sum();
+
+    friend ostream& operator<<(ostream& os, Mang<T> arr) {
+        os << arr.Sum();
         return os;
     }
-    T Sum()
-    {
+
+    T Sum() {
         T sum;
         sum = 0;
-        for(int i = 0; i < this->size; i++)
-        {
-            sum = sum + this->values[i];
+        for (int i = 0; i < size; i++) {
+            sum = sum + values[i];
         }
         return sum;
     }
 };
 
-int main()
-{
+int main() {
     Mang<int> a;
     Mang<PhanSo> b;
-    
+
     char type;
     cin >> type;
-    switch(type)
-    {
+    switch (type) {
         case 'a':
-        {
             cin >> a;
             cout << a;
             break;
-        }
         case 'b':
-        {
             cin >> b;
             cout << b;
             break;
-        }
     }
     return 0;
 }
