@@ -3,10 +3,10 @@
 using namespace std;
 
 void PrintBinaryString(int n) { 
-    int total = 1;
+    int total = 1; 
     for(int i = 0; i < n; i++) {
         total *= 2;
-    }
+    } // Thay cho pow(2,n);
     
     for(int i = 0; i < total; i++) {
         // Chuyển số i sang dãy nhị phân 32 bit.
@@ -22,7 +22,7 @@ void Another(int n) {
     int total = 1;
     for(int i = 0; i < n; i++) {
         total *= 2;
-    }
+    } // Thay cho pow(2,n);
     
     for(int i = 0; i < total; i++) {
         int num = i;
