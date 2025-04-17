@@ -2,68 +2,59 @@
 #include <vector>
 using namespace std;
 
-#define MAX 250
+struct ToaDo {
+    int Ox, Oy;
+    ToaDo(int a, int b) : Ox(a), Oy(b) {}
+};
 
-int row, col;
-int grid[MAX][MAX];
-bool visited[MAX][MAX];
+int n, m, sum = 0;
+int a[100][100];
+vector<ToaDo> pos;
 
-int dx[] = {-1,1,0,0};
-int dy[] = {0,0,-1,1};
+int dx[] = {-1, 0, 1, 0};
+int dy[] = {0, -1, 0, 1};
 
-int total = 0;
-vector<pair<int,int>> current_region;
-
-void BackTracking(int x, int y) {
-    visited[x][y] = true;
-    current_region.push_back({x,y});
-    
-    for(int d = 0; d < 4; d++) {
-        int xx = x + dx[d];
-        int yy = y + dy[d];
-        
-        if(1 <= xx && xx <= row && 1 <= yy && yy <= col 
-        && !visited[xx][yy] && grid[xx][yy] == 1) {
-            BackTracking(xx,yy);
-        }
-    }
-}
-
-void Input() {
-    cin >> row >> col;
-    for(int i = 0; i < row; i++) {
-        for(int j = 0; j < col; j++) {
-            cin >> grid[i][j];
-            if(grid[i][j] == 1)
-                total++;
-        }
-    }
-}
-
-void Process() {
-    cout << total << "\n";
-    for (int i = 0; i < row; i++) {
-        for (int j = 0; j < col; j++) {
-            if (!visited[i][j] && grid[i][j] == 1) {
-                current_region.clear();
-                BackTracking(i, j);
-
-                cout << current_region.size() << " ";
-                for (size_t k = 0; k < current_region.size(); k++) {
-                    // In chỉ số theo đề: [dòng, cột], tính từ 1
-                    cout << "[" << current_region[k].first + 1
-                         << "," << current_region[k].second + 1 << "]";
-                    if (k != current_region.size() - 1)
-                        cout << ", ";
-                }
-                cout << "\n";
-            }
+void Try(int x, int y) {
+    for(int i = 0; i < 4; i++) {
+        int xx = x + dx[i];
+        int yy = y + dy[i];
+        if(xx >= 1 && xx <= n && yy >= 1 && y <= m && a[xx][yy] == 1) {
+            a[xx][yy] = 0;
+            pos.push_back({xx,yy});
+            Try(xx, yy);
         }
     }
 }
 
 int main() {
-    Input();
-    Process();
+    cin >> n >> m;
+    
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= m; j++) {
+            cin >> a[i][j];
+            if(a[i][j] == 1) sum++;
+        }
+    }
+    
+    cout << sum << "\n";
+    
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= m; j++) {
+            if(a[i][j] == 1) {
+                a[i][j] = 0;
+                pos.push_back({i,j});
+                Try(i,j);
+                
+                cout << pos.size();
+                for(int k = 0; k < pos.size(); k++) {
+                    if(k > 0) cout << ",";
+                    cout << " [" << pos[k].Ox << ","
+                    << pos[k].Oy << "]";
+                }
+                cout << "\n";
+                pos.clear();
+            }
+        }
+    }
     return 0;
 }
