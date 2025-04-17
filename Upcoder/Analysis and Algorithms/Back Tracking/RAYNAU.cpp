@@ -18,7 +18,7 @@ void Try(int x, int y) {
     for(int i = 0; i < 4; i++) {
         int xx = x + dx[i];
         int yy = y + dy[i];
-        if(xx >= 1 && xx <= n && yy >= 1 && y <= m && a[xx][yy] == 1) {
+        if(xx >= 1 && xx <= n && yy >= 1 && yy <= m && a[xx][yy] == 1) {
             a[xx][yy] = 0;
             pos.push_back({xx,yy});
             Try(xx, yy);
